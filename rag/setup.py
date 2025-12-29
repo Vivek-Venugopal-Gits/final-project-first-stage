@@ -14,3 +14,6 @@ def setup_rag():
     build_vector_store(chunks)
 
     print("RAG setup complete.")
+
+#Command
+#python -c "from rag.setup import setup_rag; setup_rag()"
