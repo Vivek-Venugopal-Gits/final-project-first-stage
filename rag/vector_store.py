@@ -25,5 +25,4 @@ def build_vector_store(chunks):
         ids=[str(i) for i in range(len(texts))]
     )
 
-    # ❌ DO NOT call client.persist()
-    # ChromaDB automatically persists when persist_directory is set
+    
