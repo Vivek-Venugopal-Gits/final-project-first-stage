@@ -1,18 +1,32 @@
 import chromadb
-from chromadb.config import Settings
 from rag.embeddings import embed_texts
+from pathlib import Path
 
-CHROMA_PATH = "data/vector_db"
+# Use relative path from the rag module
+CHROMA_PATH = Path(__file__).parent.parent / "data" / "vector_db"
 
 
 def retrieve_context(query, k=4):
-    client = chromadb.Client(
-        Settings(persist_directory=CHROMA_PATH)
+    """
+    Retrieve relevant context from the vector database.
+    
+    Args:
+        query: User's query string
+        k: Number of results to retrieve
+    
+    Returns:
+        tuple: (combined_context_string, list_of_sources)
+    """
+    # Create persistent client
+    client = chromadb.PersistentClient(
+        path=str(CHROMA_PATH)
     )
 
     try:
         collection = client.get_collection("django_docs")
-    except Exception:
+    except Exception as e:
+        print(f"⚠️  Warning: Vector database not found. Run RAG setup first.")
+        print(f"   Error: {e}")
         return "", []
 
     query_embedding = embed_texts([query])[0]
